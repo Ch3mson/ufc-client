@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { predictMatch } from '@/app/actions/actions' // Adjust the import path as needed
+import { predictMatch } from '@/app/actions/actions'
 import { fighterNames as importedFighterNames } from '@/constants/fighters'
 
 // Fallback to an empty array if the import fails
@@ -16,7 +16,11 @@ interface FighterSelectProps {
   placeholder: string
 }
 
-const FighterSelect: React.FC<FighterSelectProps> = ({ value, onChange, placeholder }) => {
+const FighterSelect: React.FC<FighterSelectProps> = ({
+  value,
+  onChange,
+  placeholder,
+}) => {
   const [search, setSearch] = useState(value)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -46,7 +50,8 @@ const FighterSelect: React.FC<FighterSelectProps> = ({ value, onChange, placehol
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    return () =>
+      document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   const handleSelectFighter = (fighter: string) => {
@@ -57,14 +62,14 @@ const FighterSelect: React.FC<FighterSelectProps> = ({ value, onChange, placehol
   }
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative">
       <Input
         ref={inputRef}
         type="text"
         value={search}
         onChange={(e) => {
           setSearch(e.target.value)
-          onChange(e.target.value)  // Call onChange prop here
+          onChange(e.target.value) // Call onChange prop here
           setIsOpen(true)
         }}
         onFocus={() => setIsOpen(true)}
