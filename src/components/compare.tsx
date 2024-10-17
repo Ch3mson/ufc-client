@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { predictMatch } from '@/app/actions/actions'
-import { fighterNames as importedFighterNames } from '@/constants/fighters'
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { predictMatch } from '@/app/actions/actions';
+import { fighterNames as importedFighterNames } from '@/constants/fighters';
 
 // Fallback to an empty array if the import fails
-const fighterNames: string[] = importedFighterNames || []
+const fighterNames: string[] = importedFighterNames || [];
 
 interface FighterSelectProps {
-  value: string
-  onChange: (value: string) => void
-  placeholder: string
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
 }
 
 const FighterSelect: React.FC<FighterSelectProps> = ({
@@ -21,10 +21,10 @@ const FighterSelect: React.FC<FighterSelectProps> = ({
   onChange,
   placeholder,
 }) => {
-  const [search, setSearch] = useState(value)
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const dropdownRef = useRef<HTMLUListElement>(null)
+  const [search, setSearch] = useState(value);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLUListElement>(null);
 
   const filteredFighters = useMemo<string[]>(
     () =>
@@ -32,11 +32,11 @@ const FighterSelect: React.FC<FighterSelectProps> = ({
         name.toLowerCase().includes(search.toLowerCase())
       ),
     [search]
-  )
+  );
 
   useEffect(() => {
-    setSearch(value)
-  }, [value])
+    setSearch(value);
+  }, [value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,20 +46,20 @@ const FighterSelect: React.FC<FighterSelectProps> = ({
         inputRef.current &&
         !inputRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false)
+        setIsOpen(false);
       }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
+    };
+    document.addEventListener('mousedown', handleClickOutside);
     return () =>
-      document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+      document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSelectFighter = (fighter: string) => {
-    setSearch(fighter)
-    onChange(fighter)
-    setIsOpen(false)
-    inputRef.current?.blur() // Remove focus from the input
-  }
+    setSearch(fighter);
+    onChange(fighter);
+    setIsOpen(false);
+    inputRef.current?.blur(); // Remove focus from the input
+  };
 
   return (
     <div className="relative">
@@ -68,9 +68,9 @@ const FighterSelect: React.FC<FighterSelectProps> = ({
         type="text"
         value={search}
         onChange={(e) => {
-          setSearch(e.target.value)
-          onChange(e.target.value) // Call onChange prop here
-          setIsOpen(true)
+          setSearch(e.target.value);
+          onChange(e.target.value); // Call onChange prop here
+          setIsOpen(true);
         }}
         onFocus={() => setIsOpen(true)}
         placeholder={placeholder}
@@ -84,12 +84,12 @@ const FighterSelect: React.FC<FighterSelectProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+            className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-950 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-auto"
           >
             {filteredFighters.map((fighter: string) => (
               <li
                 key={fighter}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-900 cursor-pointer"
                 onClick={() => handleSelectFighter(fighter)}
               >
                 {fighter}
@@ -99,39 +99,39 @@ const FighterSelect: React.FC<FighterSelectProps> = ({
         )}
       </AnimatePresence>
     </div>
-  )
-}
+  );
+};
 
 interface PredictionResult {
-  probability_A: number
-  probability_B: number
+  probability_A: number;
+  probability_B: number;
 }
 
 const FighterInput: React.FC = () => {
-  const [fighterA, setFighterA] = useState<string>('')
-  const [fighterB, setFighterB] = useState<string>('')
-  const [result, setResult] = useState<PredictionResult | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [fighterA, setFighterA] = useState<string>('');
+  const [fighterB, setFighterB] = useState<string>('');
+  const [result, setResult] = useState<PredictionResult | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!fighterA || !fighterB) return
-    setIsLoading(true)
-    setResult(null)
+    e.preventDefault();
+    if (!fighterA || !fighterB) return;
+    setIsLoading(true);
+    setResult(null);
 
     try {
-      const data: PredictionResult = await predictMatch(fighterA, fighterB)
+      const data: PredictionResult = await predictMatch(fighterA, fighterB);
       setResult({
         probability_A: data.probability_A,
         probability_B: data.probability_B,
-      })
+      });
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Error:', error);
       // Handle error (e.g., show error message to user)
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <motion.div
@@ -168,7 +168,7 @@ const FighterInput: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="mt-4 p-4 bg-gray-100 rounded-md"
+            className="mt-4 p-4 bg-gray-100 dark:bg-neutral-950 rounded-md"
           >
             <h3 className="text-lg font-semibold mb-2">Prediction Results:</h3>
             <p>
@@ -181,7 +181,7 @@ const FighterInput: React.FC = () => {
         )}
       </AnimatePresence>
     </motion.div>
-  )
-}
+  );
+};
 
-export default FighterInput
+export default FighterInput;
