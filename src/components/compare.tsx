@@ -17,7 +17,7 @@ interface FighterSelectProps {
 }
 
 const FighterSelect: React.FC<FighterSelectProps> = ({ value, onChange, placeholder }) => {
-  const [search, setSearch] = useState<string>('')
+  const [search, setSearch] = useState(value)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLUListElement>(null)
@@ -29,6 +29,10 @@ const FighterSelect: React.FC<FighterSelectProps> = ({ value, onChange, placehol
       ),
     [search]
   )
+
+  useEffect(() => {
+    setSearch(value)
+  }, [value])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -53,17 +57,18 @@ const FighterSelect: React.FC<FighterSelectProps> = ({ value, onChange, placehol
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <Input
         ref={inputRef}
-        placeholder={placeholder}
+        type="text"
         value={search}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange={(e) => {
           setSearch(e.target.value)
+          onChange(e.target.value)  // Call onChange prop here
           setIsOpen(true)
-          onChange('')
         }}
         onFocus={() => setIsOpen(true)}
+        placeholder={placeholder}
       />
       <AnimatePresence>
         {isOpen && filteredFighters.length > 0 && (
