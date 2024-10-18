@@ -1,12 +1,18 @@
 'use client'
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion'
+import { fetchLatestDate } from '@/app/actions/actions'
 
-interface HeroProps {
-  latestDate: string;
-}
+const Hero = () => {
 
-const Hero: React.FC<HeroProps> = ({ latestDate }) => {
+  const [latestDate, setLatestDate] = useState('');
+
+  useEffect(() => {
+    fetchLatestDate()
+      .then(date => setLatestDate(date))
+      .catch(error => console.error('Error fetching the latest date:', error));
+  }, []);
+
   return (
     <div className='my-16 flex justify-center items-center'>
       <motion.div

@@ -29,20 +29,13 @@ export async function predictMatch(fighterA: string, fighterB: string) {
   }
 }
 
-export async function fetchLatestDate() {
+export async function fetchLatestDate(): Promise<string> {
   try {
-    const response = await fetch('https://ufcimage-243361513917.us-central1.run.app/latest_date', {
-      method: 'GET',
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch the latest date')
-    }
-
+    const response = await fetch('https://ufcimage-243361513917.us-central1.run.app/latest_date')
     const data = await response.json()
-    return data.latest_date
+    return data.latest_date // This will return "October 12, 2024"
   } catch (error) {
     console.error('Error fetching latest date:', error)
-    throw error
+    return 'Unknown'
   }
 }
