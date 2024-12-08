@@ -14,15 +14,7 @@ const navLinks = [
     {
       href: "/",
       label: "Home",
-    },
-    {
-      href: "/gallery",
-      label: "Gallery",
-    },
-    {
-      href: "https://drive.google.com/file/d/1GW6A-lZigkQOo7kzv13PMRUuBkRB9UiZ/view?usp=drive_link",
-      label: "Resume",
-    },
+    }
   ]
 
 const MobileNav = () => {
